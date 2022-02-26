@@ -1,11 +1,11 @@
 #include <cstdio>
-#include <windows.h>
+#include<sys/time.h>
 #include<string.h>
 #include<iostream>
 #include<fstream>
 using namespace std ;
 typedef long long ll;
-const int N = 10230; // matrix size
+const int N = 10240; // matrix size
 const double INTERVAL = 1;
 
 double b[N] [N] , col_sum[N] , a[N];
@@ -22,12 +22,12 @@ void init () // generate a N*N matrix
 }
 void col_plain(int n)
 {
-    ll head, tail , freq ,counter(0);
-    QueryPerformanceFrequency((LARGE_INTEGER*)&freq);
+    timeval tv_begin, tv_end;
+    int counter(0);
     // start time
-    QueryPerformanceCounter((LARGE_INTEGER *)&head);
-    tail = head;
-    while(INTERVAL*freq>(tail-head)*1000)
+    gettimeofday(&tv_begin, 0);
+    tv_end = tv_begin;
+    while(INTERVAL>(tv_end.tv_usec-tv_begin.tv_usec))
     {
         for (int i = 0; i < n; i++)
         {
@@ -36,18 +36,18 @@ void col_plain(int n)
                 col_sum[ i ] += b[ j ] [ i ] * a[j];
         }
         //end time
-        QueryPerformanceCounter((LARGE_INTEGER *)&tail);
+        gettimeofday(&tv_end, 0);
         counter++;
     }
-    outfile<<(tail-head)*1000.0/freq/counter<<","<<counter<<",";
+    outfile<<(((double)(tv_end.tv_usec-tv_begin.tv_usec))/counter<<","<<counter<<",";
 }
 void col_cached(int n)
 {
-    ll head, tail , freq ,counter(0);
-    QueryPerformanceFrequency((LARGE_INTEGER*)&freq);
+    timeval tv_begin, tv_end;
+    int counter(0);
     // start time
-    QueryPerformanceCounter((LARGE_INTEGER *)&head);
-    while(INTERVAL*freq>(tail-head)*1000)
+    gettimeofday(&tv_begin, 0);
+    while(INTERVAL>(tv_end.tv_usec-tv_begin.tv_usec))
     {
         for (int i = 0; i < n; i++)
         {
@@ -57,10 +57,10 @@ void col_cached(int n)
                     col_sum[ i ] += b[ j ] [ i ] * a[j] ;
         }
         //end time
-        QueryPerformanceCounter((LARGE_INTEGER *)&tail);
+        gettimeofday(&tv_end, 0);
         counter++;
     }
-    outfile<<(tail-head)*1000.0/freq/counter<<","<<counter<<endl;
+    outfile<<(((double)(tv_end.tv_usec-tv_begin.tv_usec))/counter<<","<<counter<<endl;
 }
 int main()
 {
