@@ -39,7 +39,7 @@ void col_plain(int n)
         gettimeofday(&tv_end, 0);
         counter++;
     }
-    outfile<<(((double)(tv_end.tv_usec-tv_begin.tv_usec))/counter<<","<<counter<<",";
+    outfile<<((double)(tv_end.tv_usec-tv_begin.tv_usec))/(double)counter/1000.0<<","<<counter<<",";
 }
 void col_cached(int n)
 {
@@ -60,7 +60,7 @@ void col_cached(int n)
         gettimeofday(&tv_end, 0);
         counter++;
     }
-    outfile<<(((double)(tv_end.tv_usec-tv_begin.tv_usec))/counter<<","<<counter<<endl;
+    outfile<<((double)(tv_end.tv_usec-tv_begin.tv_usec))/(double)counter/1000.0<<","<<counter<<endl;
 }
 int main()
 {
@@ -69,7 +69,9 @@ int main()
     for(int i=0;i<N;i+=10)
     {
         outfile<<i<<",";
+        cout<<i<<"th assignment starts"<<endl;
         col_plain(i);
         col_cached(i);
+        cout<<i<<"th assignment ends"<<endl;
     }
 }
