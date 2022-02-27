@@ -6,7 +6,6 @@
 using namespace std ;
 typedef long long ll;
 const int N = 10240; // matrix size
-const double INTERVAL = 1;
 
 double b[N] [N] , col_sum[N] , a[N];
 ofstream outfile;
@@ -23,44 +22,33 @@ void init () // generate a N*N matrix
 void col_plain(int n)
 {
     timeval tv_begin, tv_end;
-    int counter(0);
     // start time
     gettimeofday(&tv_begin, 0);
-    tv_end = tv_begin;
-    while(INTERVAL>(tv_end.tv_usec-tv_begin.tv_usec))
+    for (int i = 0; i < n; i++)
     {
-        for (int i = 0; i < n; i++)
-        {
-            col_sum[ i ] = 0.0;
-            for (int j = 0; j < n; j++)
-                col_sum[ i ] += b[ j ] [ i ] * a[j];
-        }
-        //end time
-        gettimeofday(&tv_end, 0);
-        counter++;
+        col_sum[ i ] = 0.0;
+        for (int j = 0; j < n; j++)
+            col_sum[ i ] += b[ j ] [ i ] * a[j];
     }
-    outfile<<((double)(tv_end.tv_usec-tv_begin.tv_usec))/(double)counter/1000.0<<","<<counter<<",";
+    //end time
+    gettimeofday(&tv_end, 0);
+    outfile<<((double)(tv_end.tv_usec-tv_begin.tv_usec))/1000.0<<",";
 }
 void col_cached(int n)
 {
     timeval tv_begin, tv_end;
-    int counter(0);
     // start time
     gettimeofday(&tv_begin, 0);
-    while(INTERVAL>(tv_end.tv_usec-tv_begin.tv_usec))
+    for (int i = 0; i < n; i++)
     {
-        for (int i = 0; i < n; i++)
-        {
-            col_sum[ i ] = 0.0;
-            for (int j = 0; j < n; j++)
-                for(i = 0;i < n;i++)
-                    col_sum[ i ] += b[ j ] [ i ] * a[j] ;
-        }
-        //end time
-        gettimeofday(&tv_end, 0);
-        counter++;
+        col_sum[ i ] = 0.0;
+        for (int j = 0; j < n; j++)
+            for(i = 0;i < n;i++)
+                col_sum[ i ] += b[ j ] [ i ] * a[j] ;
     }
-    outfile<<((double)(tv_end.tv_usec-tv_begin.tv_usec))/(double)counter/1000.0<<","<<counter<<endl;
+    //end time
+    gettimeofday(&tv_end, 0);
+    outfile<<((double)(tv_end.tv_usec-tv_begin.tv_usec))/1000.0<<endl;
 }
 int main()
 {
